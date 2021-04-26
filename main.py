@@ -24,6 +24,13 @@ casey_x = random.randint(0, 736)
 casey_y = 0
 casey_speed_x = 3
 
+# Load weapon image
+weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
+weapon_x = 0
+weapon_y = 0
+weapon_speed_y = 2.5
+weapon_state = "ready"
+
 
 def player(x, y):
     screen.blit(player_img, (x, y))
@@ -33,16 +40,27 @@ def casey(x, y):
     screen.blit(casey_img, (x, y))
 
 
+def weapon(x, y):
+    global weapon_state
+    weapon_state = "throw"
+    screen.blit(weapon_img, (x + 16, y + 10))
+
+
 running = True
 
 while running:
     # Game screen background color
     screen.fill((71, 57, 39))
 
-    # Player movements
     for event in pygame.event.get():
+        # Closing game window
         if event.type == pygame.QUIT:
             running = False
+        # Throwing shuriken weapon
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                weapon_y = player_y
+                weapon(player_x, weapon_y)
 
     # Fixed players movements
     keys = pygame.key.get_pressed()
@@ -85,6 +103,10 @@ while running:
 
     # Make magic come true: run player and enemy characters functions
     player(player_x, player_y)
+
+    if weapon_state == "throw":
+        weapon(player_x, weapon_y)
+        weapon_y -= weapon_speed_y
 
     casey(casey_x, casey_y)
 
