@@ -3,6 +3,7 @@ import random
 
 # Initialize game window, set window title and icon:
 pygame.init()
+clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Turtle Warrior")
@@ -21,7 +22,7 @@ player_speed_y = 0
 casey_img = pygame.image.load("assets/graphics/enemy_casey.png")
 casey_x = random.randint(0, 736)
 casey_y = 0
-casey_speed_x = 0.12
+casey_speed_x = 3
 
 
 def player(x, y):
@@ -49,14 +50,14 @@ while running:
     player_speed_y = 0
 
     if keys[pygame.K_LEFT]:
-        player_speed_x = -0.1
+        player_speed_x = -2
     elif keys[pygame.K_RIGHT]:
-        player_speed_x = 0.1
+        player_speed_x = 2
 
     if keys[pygame.K_UP]:
-        player_speed_y = -0.1
+        player_speed_y = -2
     elif keys[pygame.K_DOWN]:
-        player_speed_y = 0.1
+        player_speed_y = 2
 
     player_x += player_speed_x
     player_y += player_speed_y
@@ -87,4 +88,5 @@ while running:
 
     casey(casey_x, casey_y)
 
-    pygame.display.update()
+    pygame.display.flip()
+    clock.tick(60)
