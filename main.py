@@ -42,20 +42,21 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                player_speed_x = -0.1
-            if event.key == pygame.K_RIGHT:
-                player_speed_x = 0.1
-            if event.key == pygame.K_UP:
-                player_speed_y = -0.1
-            if event.key == pygame.K_DOWN:
-                player_speed_y = 0.1
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                player_speed_x = 0
-            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                player_speed_y = 0
+
+    # Fixed players movements
+    keys = pygame.key.get_pressed()
+    player_speed_x = 0
+    player_speed_y = 0
+
+    if keys[pygame.K_LEFT]:
+        player_speed_x = -0.1
+    elif keys[pygame.K_RIGHT]:
+        player_speed_x = 0.1
+
+    if keys[pygame.K_UP]:
+        player_speed_y = -0.1
+    elif keys[pygame.K_DOWN]:
+        player_speed_y = 0.1
 
     player_x += player_speed_x
     player_y += player_speed_y
