@@ -22,7 +22,7 @@ player_speed_y = 0
 casey_img = pygame.image.load("assets/graphics/enemy_casey.png")
 casey_x = random.randint(0, 736)
 casey_y = 0
-casey_speed_x = 3
+casey_speed_x = random.randint(-6, 6)
 
 # Load weapon image
 weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
