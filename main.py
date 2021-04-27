@@ -24,11 +24,18 @@ player_speed_x = 0
 player_speed_y = 0
 player_speed_change = 2
 
-# Load casey character image
-casey_img = pygame.image.load("assets/graphics/enemy_casey.png")
-casey_x = random.randint(1, 735)
-casey_y = 0
-casey_speed_x = random.choice([-6, -5, -4, -3, 4, 5, 6])
+# Load enemy characters image and set its speed
+enemy_img = []
+enemy_x = []
+enemy_y = []
+enemy_speed_x = []
+number_of_enemies = 6
+
+for i in range(number_of_enemies):
+    enemy_img.append(pygame.image.load("assets/graphics/enemy_casey.png"))
+    enemy_x.append(random.randint(1, 735))
+    enemy_y.append(0)
+    enemy_speed_x.append(random.choice([-6, -5, -4, -3, 4, 5, 6]))
 
 # Load weapon image
 weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
@@ -42,8 +49,8 @@ def player(x, y):
     screen.blit(player_img, (x, y))
 
 
-def casey(x, y):
-    screen.blit(casey_img, (x, y))
+def enemy(x, y, i):
+    screen.blit(enemy_img[i], (x, y))
 
 
 def weapon(x, y):
@@ -52,17 +59,17 @@ def weapon(x, y):
     screen.blit(weapon_img, (x + 16, y + 10))
 
 
-def is_hit(casey_x, casey_y, weapon_x, weapon_y):
-    distance = math.sqrt((math.pow(casey_x - weapon_x, 2) + math.pow(casey_y - weapon_y, 2)))
+def is_hit(enemy_x, enemy_y, weapon_x, weapon_y):
+    distance = math.sqrt((math.pow(enemy_x - weapon_x, 2) + math.pow(enemy_y - weapon_y, 2)))
     if distance < 25:
         return True
 
 
-def generate_casey():
-    global casey_x, casey_y, casey_speed_x
-    casey_x = random.randint(1, 735)
-    casey_y = 0
-    casey_speed_x = random.choice([-6, -5, -4, 4, 5, 6])
+def generate_enemy(i):
+    global enemy_x, enemy_y, enemy_speed_x
+    enemy_x[i] = random.randint(1, 735)
+    enemy_y[i] = 0
+    enemy_speed_x[i] = random.choice([-6, -5, -4, 4, 5, 6])
 
 
 running = True
@@ -102,8 +109,6 @@ while running:
     player_x += player_speed_x
     player_y += player_speed_y
 
-    casey_x += casey_speed_x
-
     # Set game area for player:
     if player_x <= 0:
         player_x = 0
@@ -116,12 +121,25 @@ while running:
         player_y = 536
 
     # Set game area for Casey character:
-    if casey_x <= 0:
-        casey_speed_x *= -1
-        casey_y += 32
-    elif casey_x >= 736:
-        casey_speed_x *= -1
-        casey_y += 32
+    for i in range(number_of_enemies):
+        if enemy_x[i] <= 0:
+            enemy_speed_x[i] *= -1
+            enemy_y[i] += 32
+        elif enemy_x[i] >= 736:
+            enemy_speed_x[i] *= -1
+            enemy_y[i] += 32
+
+        # Check if weapon hit enemy
+        hit = is_hit(enemy_x[i], enemy_y[i], weapon_x, weapon_y)
+        if hit:
+            weapon_state = "ready"
+            weapon_y = -50
+            score += 1
+            generate_enemy(i)
+
+        enemy(enemy_x[i], enemy_y[i], i)
+
+        enemy_x[i] += enemy_speed_x[i]
 
     # Make magic come true: run player and enemy characters functions
     player(player_x, player_y)
@@ -133,16 +151,6 @@ while running:
     if weapon_state == "throw":
         weapon(weapon_x, weapon_y)
         weapon_y -= weapon_speed_y
-
-    # Check if weapon hit enemy
-    hit = is_hit(casey_x, casey_y, weapon_x, weapon_y)
-    if hit:
-        weapon_state = "ready"
-        weapon_y = -50
-        score += 1
-        generate_casey()
-
-    casey(casey_x, casey_y)
 
     pygame.display.update()
     clock.tick(60)
