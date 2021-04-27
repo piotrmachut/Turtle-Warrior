@@ -5,15 +5,15 @@ import math
 # Initialize game window, set window title and icon:
 pygame.init()
 
-# Game scores
+# Game score
 score = 0
-font = pygame.font.Font("assets/fonts/Turtles.otf", 32)
+score_font = pygame.font.Font("assets/fonts/Turtles.otf", 32)
 score_text_x = 10
 score_text_y = 10
 
 
 def show_score(x, y):
-    score_text = font.render("Score: " + str(score), True, (0, 0, 0))
+    score_text = score_font.render("Score: " + str(score), True, (0, 0, 0))
     screen.blit(score_text, (x, y))
 
 
@@ -28,8 +28,10 @@ pygame.display.set_icon(icon)
 
 # Load player's character image and set its basic position:
 player_img = pygame.image.load("assets/graphics/player_donatello.png")
-player_x = 368
-player_y = 480
+default_player_x = 368
+default_player_y = 480
+player_x = default_player_x
+player_y = default_player_y
 player_speed_x = 0
 player_speed_y = 0
 player_speed_change = 2
@@ -54,6 +56,28 @@ weapon_y = -50
 weapon_speed_y = 5
 weapon_state = "ready"
 
+game_over_font = pygame.font.Font("assets/fonts/Turtles.otf", 70)
+game_state = "play"
+
+
+def game_over():
+    global game_state, number_of_enemies, enemy_y
+    for j in range(number_of_enemies):
+        enemy_y[j] = 2000
+    game_state = "over"
+    game_over_text = game_over_font.render("Game over!", True, (0, 0, 0))
+    screen.blit(game_over_text, (200, 250))
+
+
+def new_game():
+    global game_state, score, player_x, player_y, default_player_x, default_player_y
+    game_state = "play"
+    score = 0
+    for i in range(number_of_enemies):
+        generate_enemy(i)
+    player_x = default_player_x
+    player_y = default_player_y
+
 
 def player(x, y):
     screen.blit(player_img, (x, y))
@@ -69,9 +93,9 @@ def weapon(x, y):
     screen.blit(weapon_img, (x + 16, y + 10))
 
 
-def is_hit(enemy_x, enemy_y, weapon_x, weapon_y):
-    distance = math.sqrt((math.pow(enemy_x - weapon_x, 2) + math.pow(enemy_y - weapon_y, 2)))
-    if distance < 25:
+def is_collision(enemy_x, enemy_y, object_x, object_y, d):
+    distance = math.sqrt((math.pow(enemy_x - object_x, 2) + math.pow(enemy_y - object_y, 2)))
+    if distance < d:
         return True
 
 
@@ -100,21 +124,25 @@ while running:
                     weapon_y = player_y
                     weapon_x = player_x
                     weapon(weapon_x, weapon_y)
+            if game_state == "over":
+                if event.key == pygame.K_ESCAPE:
+                    new_game()
 
     # Fixed players movements
     keys = pygame.key.get_pressed()
     player_speed_x = 0
     player_speed_y = 0
 
-    if keys[pygame.K_LEFT]:
-        player_speed_x = -player_speed_change
-    elif keys[pygame.K_RIGHT]:
-        player_speed_x = player_speed_change
+    if game_state == "play":
+        if keys[pygame.K_LEFT]:
+            player_speed_x = -player_speed_change
+        elif keys[pygame.K_RIGHT]:
+            player_speed_x = player_speed_change
 
-    if keys[pygame.K_UP]:
-        player_speed_y = -player_speed_change
-    elif keys[pygame.K_DOWN]:
-        player_speed_y = player_speed_change
+        if keys[pygame.K_UP]:
+            player_speed_y = -player_speed_change
+        elif keys[pygame.K_DOWN]:
+            player_speed_y = player_speed_change
 
     player_x += player_speed_x
     player_y += player_speed_y
@@ -130,8 +158,13 @@ while running:
     elif player_y >= 536:
         player_y = 536
 
-    # Set game area for Casey character:
+    # Set game area for enemies:
     for i in range(number_of_enemies):
+
+        if enemy_y[i] > 536:
+            game_over()
+            break
+
         if enemy_x[i] <= 0:
             enemy_speed_x[i] *= -1
             enemy_y[i] += 32
@@ -140,12 +173,16 @@ while running:
             enemy_y[i] += 32
 
         # Check if weapon hit enemy
-        hit = is_hit(enemy_x[i], enemy_y[i], weapon_x, weapon_y)
+        hit = is_collision(enemy_x[i], enemy_y[i], weapon_x, weapon_y, 25)
         if hit:
             weapon_state = "ready"
             weapon_y = -50
             score += 1
             generate_enemy(i)
+
+        collision = is_collision(enemy_x[i], enemy_y[i], player_x, player_y, 50)
+        if collision:
+            game_over()
 
         enemy(enemy_x[i], enemy_y[i], i)
 
