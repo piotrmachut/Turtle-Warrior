@@ -3,6 +3,8 @@ import random
 
 # Initialize game window, set window title and icon:
 pygame.init()
+
+# Game clock
 clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode((800, 600))
@@ -22,7 +24,7 @@ player_speed_y = 0
 casey_img = pygame.image.load("assets/graphics/enemy_casey.png")
 casey_x = random.randint(0, 736)
 casey_y = 0
-casey_speed_x = random.randint(-6, 6)
+casey_speed_x = random.choice([-6, -5, -4, -3, 4, 5, 6])
 
 # Load weapon image
 weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
@@ -59,8 +61,10 @@ while running:
         # Throwing shuriken weapon
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                weapon_y = player_y
-                weapon(player_x, weapon_y)
+                if weapon_state == "ready":
+                    weapon_y = player_y
+                    weapon_x = player_x
+                    weapon(weapon_x, weapon_y)
 
     # Fixed players movements
     keys = pygame.key.get_pressed()
@@ -104,11 +108,15 @@ while running:
     # Make magic come true: run player and enemy characters functions
     player(player_x, player_y)
 
+    if weapon_y <= -32:
+        weapon_y = -50
+        weapon_state = "ready"
+
     if weapon_state == "throw":
-        weapon(player_x, weapon_y)
+        weapon(weapon_x, weapon_y)
         weapon_y -= weapon_speed_y
 
     casey(casey_x, casey_y)
 
-    pygame.display.flip()
+    pygame.display.update()
     clock.tick(60)
