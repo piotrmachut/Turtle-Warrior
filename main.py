@@ -1,8 +1,11 @@
 import pygame
 import random
+import math
 
 # Initialize game window, set window title and icon:
 pygame.init()
+
+score = 0
 
 # Game clock
 clock = pygame.time.Clock()
@@ -19,10 +22,11 @@ player_x = 368
 player_y = 480
 player_speed_x = 0
 player_speed_y = 0
+player_speed_change = 2
 
 # Load casey character image
 casey_img = pygame.image.load("assets/graphics/enemy_casey.png")
-casey_x = random.randint(0, 736)
+casey_x = random.randint(1, 735)
 casey_y = 0
 casey_speed_x = random.choice([-6, -5, -4, -3, 4, 5, 6])
 
@@ -30,7 +34,7 @@ casey_speed_x = random.choice([-6, -5, -4, -3, 4, 5, 6])
 weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
 weapon_x = 0
 weapon_y = 0
-weapon_speed_y = 2.5
+weapon_speed_y = 5
 weapon_state = "ready"
 
 
@@ -48,6 +52,19 @@ def weapon(x, y):
     screen.blit(weapon_img, (x + 16, y + 10))
 
 
+def is_hit(casey_x, casey_y, weapon_x, weapon_y):
+    distance = math.sqrt((math.pow(casey_x - weapon_x, 2) + math.pow(casey_y - weapon_y, 2)))
+    if distance < 25:
+        return True
+
+
+def generate_casey():
+    global casey_x, casey_y, casey_speed_x
+    casey_x = random.randint(1, 735)
+    casey_y = 0
+    casey_speed_x = random.choice([-6, -5, -4, 4, 5, 6])
+
+
 running = True
 
 while running:
@@ -58,6 +75,7 @@ while running:
         # Closing game window
         if event.type == pygame.QUIT:
             running = False
+
         # Throwing shuriken weapon
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
@@ -72,14 +90,14 @@ while running:
     player_speed_y = 0
 
     if keys[pygame.K_LEFT]:
-        player_speed_x = -2
+        player_speed_x = -player_speed_change
     elif keys[pygame.K_RIGHT]:
-        player_speed_x = 2
+        player_speed_x = player_speed_change
 
     if keys[pygame.K_UP]:
-        player_speed_y = -2
+        player_speed_y = -player_speed_change
     elif keys[pygame.K_DOWN]:
-        player_speed_y = 2
+        player_speed_y = player_speed_change
 
     player_x += player_speed_x
     player_y += player_speed_y
@@ -115,6 +133,14 @@ while running:
     if weapon_state == "throw":
         weapon(weapon_x, weapon_y)
         weapon_y -= weapon_speed_y
+
+    # Check if weapon hit enemy
+    hit = is_hit(casey_x, casey_y, weapon_x, weapon_y)
+    if hit:
+        weapon_state = "ready"
+        weapon_y = -50
+        score += 1
+        generate_casey()
 
     casey(casey_x, casey_y)
 
