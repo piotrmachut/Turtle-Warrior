@@ -5,7 +5,17 @@ import math
 # Initialize game window, set window title and icon:
 pygame.init()
 
+# Game scores
 score = 0
+font = pygame.font.Font("assets/fonts/Turtles.otf", 32)
+score_text_x = 10
+score_text_y = 10
+
+
+def show_score(x, y):
+    score_text = font.render("Score: " + str(score), True, (0, 0, 0))
+    screen.blit(score_text, (x, y))
+
 
 # Game clock
 clock = pygame.time.Clock()
@@ -39,8 +49,8 @@ for i in range(number_of_enemies):
 
 # Load weapon image
 weapon_img = pygame.image.load("assets/graphics/weapon_shuriken.png")
-weapon_x = 0
-weapon_y = 0
+weapon_x = -50
+weapon_y = -50
 weapon_speed_y = 5
 weapon_state = "ready"
 
@@ -141,9 +151,6 @@ while running:
 
         enemy_x[i] += enemy_speed_x[i]
 
-    # Make magic come true: run player and enemy characters functions
-    player(player_x, player_y)
-
     if weapon_y <= -32:
         weapon_y = -50
         weapon_state = "ready"
@@ -151,6 +158,9 @@ while running:
     if weapon_state == "throw":
         weapon(weapon_x, weapon_y)
         weapon_y -= weapon_speed_y
+
+    player(player_x, player_y)
+    show_score(score_text_x, score_text_y)
 
     pygame.display.update()
     clock.tick(60)
