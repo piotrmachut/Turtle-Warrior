@@ -1,9 +1,15 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # Initialize game window, set window title and icon:
 pygame.init()
+
+# Game soundtrack
+mixer.music.load("assets/sounds/assets_qpec_-_The_Warrior.mp3")
+mixer.music.play(-1)
+mixer.music.set_volume(0.5)
 
 # Game score
 score = 0
@@ -121,6 +127,8 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if weapon_state == "ready":
+                    weapon_sound = mixer.Sound("assets/sounds/shuriken2.wav")
+                    weapon_sound.play()
                     weapon_y = player_y
                     weapon_x = player_x
                     weapon(weapon_x, weapon_y)
@@ -175,6 +183,8 @@ while running:
         # Check if weapon hit enemy
         hit = is_collision(enemy_x[i], enemy_y[i], weapon_x, weapon_y, 25)
         if hit:
+            death_sound = mixer.Sound("assets/sounds/death-grunt.wav")
+            death_sound.play()
             weapon_state = "ready"
             weapon_y = -50
             score += 1
@@ -183,6 +193,7 @@ while running:
         collision = is_collision(enemy_x[i], enemy_y[i], player_x, player_y, 50)
         if collision:
             game_over()
+            break
 
         enemy(enemy_x[i], enemy_y[i], i)
 
