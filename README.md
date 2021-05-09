@@ -4,7 +4,12 @@ Simple 'space invaders' type game written in Python using pygame.
 
 Game theme and inspiration: Ninja Turtles
 
+<img src="https://i.ibb.co/LgVjv6x/screenshot.png" alt="screenshot" border="0">
 
+# Game control
+ ➡️ ⬅️ ⬆️ ⬇️ - Donatello movements<br>
+ <b>SPACE</b> - Throw shuriken<br>
+ <b>ESC</b> - Load new game on "Game over" screen
 
 Game assets courtesy of:
 <ul>
