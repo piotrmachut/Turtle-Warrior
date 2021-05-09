@@ -48,9 +48,15 @@ enemy_x = []
 enemy_y = []
 enemy_speed_x = []
 number_of_enemies = 6
+enemies_characters = ["assets/graphics/enemy_casey.png",
+                      "assets/graphics/enemy_karai.png",
+                      "assets/graphics/enemy_bebop.png",
+                      "assets/graphics/enemy_rocksteady.png",
+                      "assets/graphics/enemy_shredder.png",
+                      "assets/graphics/enemy_footclan.png"]
 
 for i in range(number_of_enemies):
-    enemy_img.append(pygame.image.load("assets/graphics/enemy_casey.png"))
+    enemy_img.append(pygame.image.load(random.choice(enemies_characters)))
     enemy_x.append(random.randint(1, 735))
     enemy_y.append(0)
     enemy_speed_x.append(random.choice([-6, -5, -4, -3, 4, 5, 6]))
