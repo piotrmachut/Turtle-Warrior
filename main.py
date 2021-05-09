@@ -121,8 +121,9 @@ def generate_enemy(i):
 running = True
 
 while running:
-    # Game screen background color
-    screen.fill((71, 57, 39))
+    # Game screen background
+    background = pygame.image.load("assets/graphics/background.png")
+    screen.blit(background, (0, 0))
 
     for event in pygame.event.get():
         # Closing game window
