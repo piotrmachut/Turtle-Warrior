@@ -8,13 +8,14 @@ Game theme and inspiration: Ninja Turtles
 
 Game assets courtesy of:
 <ul>
-<li>Graphics made by surang. https://www.flaticon.com/authors/surang</li>
+<li>Characters and icons made by <a href='https://www.flaticon.com/authors/surang'>surang</a>. </li>
+<li>City vector created by <a href='https://www.freepik.com/vectors/city'>upklyak</a></li>
 <li>Font made by Pixel Saga.</li>
-<li>Background music: The Warrior by Olenergy (c) copyright 2009 Licensed under a Creative Commons Attribution (3.0) license. http://dig.ccmixter.org/files/qpec/21156</li>
+<li>Background music: <a href='http://dig.ccmixter.org/files/qpec/21156'>The Warrior by Olenergy</a> (c) copyright 2009 Licensed under a Creative Commons Attribution (3.0) license.</li>
 <li>Game sounds:
 	<ul>
-	<li>https://freesound.org/people/tonsil5/sounds/416838/</li>
-	<li>https://freesound.org/people/Taira%20Komori/sounds/215011/</li>
+	<li><a href='https://freesound.org/people/tonsil5/sounds/416838/'>tonsil15</a></li>
+	<li><a href='https://freesound.org/people/Taira%20Komori/sounds/215011/'>Taira Komori</a></li>
 	</ul>
 </li>
 </ul>
