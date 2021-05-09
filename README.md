@@ -6,12 +6,12 @@ Game theme and inspiration: Ninja Turtles
 
 <img src="https://i.ibb.co/LgVjv6x/screenshot.png" alt="screenshot" border="0">
 
-# Game control
+<b><u>Game control</u></b><br><br>
  ➡️ ⬅️ ⬆️ ⬇️ - Donatello movements<br>
  <b>SPACE</b> - Throw shuriken<br>
  <b>ESC</b> - Load new game on "Game over" screen
 
-Game assets courtesy of:
+<b><u>Game assets courtesy of:</u></b>
 <ul>
 <li>Characters and icons made by <a href='https://www.flaticon.com/authors/surang'>surang</a>. </li>
 <li>City vector created by <a href='https://www.freepik.com/vectors/city'>upklyak</a></li>
